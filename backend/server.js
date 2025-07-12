@@ -8,17 +8,18 @@ const http = require("http");
 const socketIO = require("socket.io");
 const questionRoutes = require("./routes/question-routes");
 const answerRoutes = require("./routes/answer-routes");
+const voteRoutes = require("./routes/vote-routes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const server = http.createServer(app);
 const io = socketIO(server, {
-  cors: { origin: "*" }
+  cors: { origin: "*" },
+  methods: ["GET", "POST", "PATCH"],
 });
 app.set("io", io);
 
-// Socket.io user room join logic
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
   if (userId) {
@@ -39,6 +40,7 @@ app.use("/api/home", homeRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/answers", answerRoutes);
+app.use("/api/votes", voteRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

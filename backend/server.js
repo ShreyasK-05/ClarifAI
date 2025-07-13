@@ -9,9 +9,12 @@ const socketIO = require("socket.io");
 const questionRoutes = require("./routes/question-routes");
 const answerRoutes = require("./routes/answer-routes");
 const voteRoutes = require("./routes/vote-routes");
+const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(cors());
+app.use(express.json());
 
 const server = http.createServer(app);
 const io = socketIO(server, {

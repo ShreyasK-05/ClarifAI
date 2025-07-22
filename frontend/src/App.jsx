@@ -8,6 +8,8 @@ import HomePage from './pages/HomePage';
 import AdminPage from './pages/AdminPage';
 import UserRoute from './components/routes/UserRoute';
 import AdminRoute from './components/routes/AdminRoute';
+import UserDashboard from './pages/UserDashboard';
+import QuestionPage from './pages/QuestionPage';
 import Navbar from './components/ui/Navbar';
 
 function App() {
@@ -24,7 +26,9 @@ function App() {
               <Route path="/" element={<Navigate to="/login" />} />
 
               <Route element={<UserRoute />}>
-                <Route path="/home" element={<HomePage />} />
+                <Route path="/home" element={<UserDashboard />} />
+                <Route path="/home/questions" element={<UserDashboard />} />
+                <Route path="/home/questions/:id" element={<QuestionPage />} />
               </Route>
 
               <Route element={<AdminRoute />}>

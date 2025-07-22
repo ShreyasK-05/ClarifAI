@@ -28,9 +28,21 @@ export const loginUser = (credentials) => {
 };
 
 export const getHomePageData = () => {
-    return api.get('/home/welcome');
+    return api.get('/home/questions/all');
 }
 
 export const getAdminPageData = () => {
     return api.get('/admin/welcome');
 }
+
+export const getQuestions = (searchTerm = '') => {
+    return api.get(`/questions${searchTerm ? `/search?keyword=${searchTerm}` : ''}`);
+};
+
+export const getQuestionById = (questionId) => api.get(`/questions/${questionId}`);
+export const postQuestion = (questionData) => api.post('/questions', questionData);
+export const postAnswer = (questionId, answerData) => api.post(`/answers/${questionId}`, answerData);
+//export const getTags = () => api.get('/tags');
+export const voteAnswer = (answerId, voteData) => {
+  return api.patch(`/votes/answer/${answerId}`, voteData);
+};

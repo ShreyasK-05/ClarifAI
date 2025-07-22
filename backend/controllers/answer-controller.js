@@ -27,6 +27,20 @@ const postAnswer = async (req, res) => {
   }
 };
 
+const displayAnswers = async (req, res) => {
+  try {
+    const answers = await Answer.find({});
+
+    const io = req.app.get("io");
+    io.emit("answersUpdated", answers); 
+
+    res.status(200).json({ answers }); 
+  } catch (err) {
+    console.error("Error fetching answers:", err);
+    res.status(500).json({ error: "Failed to fetch answers" });
+  }
+};
+
 const replyToAnswer = async (req, res) => {
   try {
     const { text } = req.body;
@@ -77,4 +91,5 @@ module.exports = {
   postAnswer,
   replyToAnswer,
   verifyAnswer,
+  displayAnswers,
 };

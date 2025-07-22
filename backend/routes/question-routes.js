@@ -4,11 +4,14 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 const { uploadToCloudinary } = require("../controllers/upload-controller");
-const { createQuestion, getQuestionById, searchQuestions, filterQuestions, uploadImage, } = require("../controllers/question-controller");
+const { createQuestion, getQuestionById, searchQuestions, filterQuestions, uploadImage, displayQuestions, } = require("../controllers/question-controller");
 const authMiddleware = require("../middleware/auth-middleware");
 
 
 router.post("/", authMiddleware, createQuestion);
+router.get("/", authMiddleware, displayQuestions);
+router.get("/all", authMiddleware, displayQuestions);
+router.get("/all", authMiddleware, displayQuestions)
 router.get("/search", searchQuestions);
 router.get("/filter", filterQuestions);
 router.get("/:id", getQuestionById);

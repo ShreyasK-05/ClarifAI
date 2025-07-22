@@ -1,4 +1,5 @@
 const Question = require("../models/Question");
+const Answer = require("../models/Answer");
 
 exports.createQuestion = async (req, res) => {
   try {
@@ -9,21 +10,39 @@ exports.createQuestion = async (req, res) => {
 
     res.status(201).json(question);
   } catch (err) {
-    console.error("❌ Error posting question:", err);  
+    console.error("Error posting question:", err);  
     res.status(500).json({ error: "Failed to post doubt" });
   }
 };
 
+
+exports.displayQuestions = async (req, res) => {
+  try {
+    const questions = await Question.find({});
+    const io = req.app.get("io");
+    io.emit("questionsUpdated", questions); 
+    res.status(200).json({ questions }); 
+  } catch (err) {
+    console.error("Error fetching questions:", err);
+    res.status(500).json({ error: "Failed to fetch questions" });
+  }
+};
+
+
 exports.getQuestionById = async (req, res) => {
   try {
     const question = await Question.findById(req.params.id).populate("postedBy", "name email");
-    if (!question) return res.status(404).json({ error: "Not found" });
+    if (!question) return res.status(404).json({ error: "Question not found" });
 
-    res.status(200).json(question);
+    const answers = await Answer.find({ questionId: req.params.id }).populate("answeredBy", "name");
+
+    res.status(200).json({ question, answers });
   } catch (err) {
+    console.error("Error fetching question by ID:", err);
     res.status(500).json({ error: "Something went wrong" });
   }
 };
+
 
 exports.searchQuestions = async (req, res) => {
   const { keyword } = req.query;
@@ -43,7 +62,7 @@ exports.searchQuestions = async (req, res) => {
 
     res.status(200).json(results);
   } catch (err) {
-    console.error("❌ Error in searchQuestions:", err);
+    console.error("Error in searchQuestions:", err);
     res.status(500).json({ error: "Search failed" });
   }
 };

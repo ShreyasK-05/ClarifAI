@@ -46,3 +46,7 @@ export const postAnswer = (questionId, answerData) => api.post(`/answers/${quest
 export const voteAnswer = (answerId, voteData) => {
   return api.patch(`/votes/answer/${answerId}`, voteData);
 };
+
+export const postReply = (answerId, replyData) => {
+  return api.post(`/answers/${answerId}/replies`, replyData);
+};
